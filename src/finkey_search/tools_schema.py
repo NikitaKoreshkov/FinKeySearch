@@ -9,7 +9,7 @@ import logging
 import os
 from typing import Any, Callable, Optional
 
-from finkey_web.live_query import compact_serp_query
+from finkey_search.live_query import compact_serp_query
 
 logger = logging.getLogger(__name__)
 
@@ -140,7 +140,7 @@ def _as_str_list(raw: Any, *, limit: int) -> list[str]:
 
 
 def _run_verify_mode(args: dict[str, Any]) -> str:
-    from finkey_web.claim_verify import verify_claims_against_evidence
+    from finkey_search.claim_verify import verify_claims_against_evidence
 
     draft = (args.get("draft_answer") or args.get("query") or "").strip()
     if not draft:
@@ -218,7 +218,7 @@ def run_web_search_tool(
     subqueries = _as_str_list(args.get("subqueries"), limit=5)
     urls = _as_str_list(args.get("urls"), limit=12)
 
-    from finkey_web.schema import SearchDepth
+    from finkey_search.schema import SearchDepth
 
     search_depth = SearchDepth.DEEP if require_full else SearchDepth.FAST
     # ChatGPT-like: orchestrator / deep-research / place-lock see the full user goal;

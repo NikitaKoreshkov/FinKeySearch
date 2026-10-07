@@ -19,7 +19,7 @@ import re
 import time
 from urllib.parse import urlencode, urlparse
 
-from finkey_web.schema import SearchResult
+from finkey_search.schema import SearchResult
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,4 @@
-# Contributing to FinKeyWeb
+# Contributing to FinKeySearch
 
 Thanks for your interest!
 

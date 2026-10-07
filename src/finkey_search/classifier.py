@@ -236,7 +236,7 @@ def _optimize_query(message: str, category: SearchCategory) -> str:
     if len(words) > 10:
         query = " ".join(words[:10])
 
-    from finkey_web.timeutil import current_datetime
+    from finkey_search.timeutil import current_datetime
 
     template = _QUERY_TEMPLATES.get(category, "{raw}")
     return template.format(raw=query, year=current_datetime().year).strip()
@@ -327,7 +327,7 @@ def _truthy_llm(raw: object) -> bool:
 
 def _today_label() -> str:
     """Current date for the classifier prompt — it cannot judge freshness blind."""
-    from finkey_web.timeutil import current_datetime
+    from finkey_search.timeutil import current_datetime
 
     now = current_datetime()
     return now.strftime("%Y-%m-%d (%A, %B %Y)")

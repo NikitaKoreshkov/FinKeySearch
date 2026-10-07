@@ -14,7 +14,7 @@ import os
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from finkey_web.metrics import InternetMetrics
+    from finkey_search.metrics import InternetMetrics
 
 logger = logging.getLogger(__name__)
 

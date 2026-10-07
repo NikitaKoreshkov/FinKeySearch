@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "finkey-web"
+name = "finkey-search"
 version = "0.1.0"
 description = "Production web-search layer for AI agents: hedged multi-provider fallback (Serper/Brave/Bing/Tavily), LLM-first search classifier, deadline-bounded parallel page enrichment, evidence gate, deep-research fan-out. Zero required dependencies."
 readme = "README.md"
@@ -30,9 +30,9 @@ otel = ["opentelemetry-api>=1.20"]
 test = ["pytest>=8"]
 
 [project.urls]
-Homepage = "https://github.com/NikitaKoreshkov/FinKeyWeb"
-Repository = "https://github.com/NikitaKoreshkov/FinKeyWeb"
-Issues = "https://github.com/NikitaKoreshkov/FinKeyWeb/issues"
+Homepage = "https://github.com/NikitaKoreshkov/FinKeySearch"
+Repository = "https://github.com/NikitaKoreshkov/FinKeySearch"
+Issues = "https://github.com/NikitaKoreshkov/FinKeySearch/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

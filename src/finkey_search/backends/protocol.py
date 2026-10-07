@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from finkey_web.schema import SearchResult
+from finkey_search.schema import SearchResult
 
 
 class SearchBackend(Protocol):

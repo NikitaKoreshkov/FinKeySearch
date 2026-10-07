@@ -8,8 +8,8 @@ import logging
 import re
 from typing import Callable, Optional
 
-from finkey_web.schema import SearchResult
-from finkey_web.synthesizer import _score_result_uncapped as heuristic_score
+from finkey_search.schema import SearchResult
+from finkey_search.synthesizer import _score_result_uncapped as heuristic_score
 
 logger = logging.getLogger(__name__)
 

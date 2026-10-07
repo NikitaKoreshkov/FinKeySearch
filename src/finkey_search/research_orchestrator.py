@@ -493,7 +493,7 @@ def _builtin_planner_generate_fn() -> Optional[Callable[[str], str]]:
                     "Authorization": f"Bearer {or_key}",
                     "Content-Type": "application/json",
                     "HTTP-Referer": os.getenv("OPENROUTER_SITE_URL", ""),
-                    "X-Title": "FinKeyWeb-orch-planner",
+                    "X-Title": "FinKeySearch-orch-planner",
                 },
                 method="POST",
             )

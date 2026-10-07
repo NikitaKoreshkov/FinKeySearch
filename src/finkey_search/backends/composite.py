@@ -10,7 +10,7 @@ from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from typing import Callable, Optional
 
-from finkey_web.schema import SearchResult
+from finkey_search.schema import SearchResult
 
 from .protocol import SearchBackend
 

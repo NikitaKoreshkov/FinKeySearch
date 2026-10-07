@@ -23,16 +23,16 @@ from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from typing import Optional
 
 try:
-    from finkey_web._browser.stealth_browser import BrowserConfig, fetch_structured_sync
+    from finkey_search._browser.stealth_browser import BrowserConfig, fetch_structured_sync
 except ImportError:  # browser backend is an optional private component
     BrowserConfig = None
     fetch_structured_sync = None
-from finkey_web.url_policy import URLPolicy
-from finkey_web.progress import emit_browser_screenshot, _live_browser_enabled
-from finkey_web.http_text_fetch import fetch_page_text_http
-from finkey_web.metrics import InternetMetrics
-from finkey_web.schema import SearchDepth, SearchResult
-from finkey_web.scrapling_fetch import fetch_page_text_scrapling
+from finkey_search.url_policy import URLPolicy
+from finkey_search.progress import emit_browser_screenshot, _live_browser_enabled
+from finkey_search.http_text_fetch import fetch_page_text_http
+from finkey_search.metrics import InternetMetrics
+from finkey_search.schema import SearchDepth, SearchResult
+from finkey_search.scrapling_fetch import fetch_page_text_scrapling
 
 logger = logging.getLogger(__name__)
 
@@ -472,7 +472,7 @@ def enrich_results_with_structured_pages(
         if not use_waves:
             return False
         try:
-            from finkey_web.evidence_gate import answer_ready
+            from finkey_search.evidence_gate import answer_ready
 
             ready = answer_ready(message, results, depth=depth_eff)
             if ready.ready:
@@ -514,7 +514,7 @@ def enrich_results_with_structured_pages(
         # one async pass over the whole wave beats per-URL Playwright; anything
         # that misses falls through to the normal wave untouched.
         if not http_only and len(wave) > 1:
-            from finkey_web.batch_fetch import batch_backend, fetch_pages_batch
+            from finkey_search.batch_fetch import batch_backend, fetch_pages_batch
 
             if batch_backend() == "crawl4ai":
                 urls = [item[2] for item in wave]

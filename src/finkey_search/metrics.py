@@ -41,7 +41,7 @@ class InternetMetrics:
     @staticmethod
     def _otel_err() -> None:
         try:
-            from finkey_web.telemetry import otel_note_backend_error
+            from finkey_search.telemetry import otel_note_backend_error
             otel_note_backend_error()
         except Exception:
             pass
@@ -49,7 +49,7 @@ class InternetMetrics:
     @staticmethod
     def _otel_skip() -> None:
         try:
-            from finkey_web.telemetry import otel_note_classifier_skip
+            from finkey_search.telemetry import otel_note_classifier_skip
             otel_note_classifier_skip()
         except Exception:
             pass
@@ -57,7 +57,7 @@ class InternetMetrics:
     @staticmethod
     def _otel_search() -> None:
         try:
-            from finkey_web.telemetry import otel_note_search_start
+            from finkey_search.telemetry import otel_note_search_start
             otel_note_search_start()
         except Exception:
             pass

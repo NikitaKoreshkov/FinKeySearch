@@ -9,7 +9,7 @@ import threading
 from typing import Any, Callable, Optional
 
 _web_progress_cb: contextvars.ContextVar[Optional[Callable[[Any], None]]] = contextvars.ContextVar(
-    "finkey_web_progress_cb",
+    "finkey_search_progress_cb",
     default=None,
 )
 

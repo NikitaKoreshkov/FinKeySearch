@@ -16,7 +16,7 @@ import urllib.request
 from typing import Optional
 from urllib.parse import urlparse
 
-from finkey_web.schema import SearchResult
+from finkey_search.schema import SearchResult
 
 logger = logging.getLogger(__name__)
 

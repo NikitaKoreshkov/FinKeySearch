@@ -3,8 +3,8 @@
 """Google Programmable Search (Custom Search JSON API)."""
 from __future__ import annotations
 
-from finkey_web.executor import WebSearchExecutor
-from finkey_web.schema import SearchResult
+from finkey_search.executor import WebSearchExecutor
+from finkey_search.schema import SearchResult
 
 
 class GoogleCSEBackend:

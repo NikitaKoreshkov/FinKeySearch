@@ -11,7 +11,7 @@ import urllib.error
 import urllib.request
 from urllib.parse import urljoin
 
-from finkey_web.url_policy import url_blocked_for_fetch
+from finkey_search.url_policy import url_blocked_for_fetch
 
 logger = logging.getLogger(__name__)
 

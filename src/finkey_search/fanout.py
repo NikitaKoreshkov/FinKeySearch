@@ -3,7 +3,7 @@
 """
 Back-compat shim — implementation lives in ``research_orchestrator``.
 
-Prefer: ``from finkey_web.research_orchestrator import orchestrate_search``
+Prefer: ``from finkey_search.research_orchestrator import orchestrate_search``
 """
 from __future__ import annotations
 

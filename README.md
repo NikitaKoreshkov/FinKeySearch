@@ -1,6 +1,6 @@
 <div align="center">
 
-# FinKeyWeb
+# FinKeySearch
 
 **The web-search layer for AI agents that answers *before* the model does.**
 Hedged multi-provider fallback, an LLM-first "do I even need to search" gate,
@@ -8,7 +8,7 @@ deadline-bounded parallel page enrichment, an evidence critic that rewrites the
 query when the first pass is thin, and a deep-research fan-out — with
 **zero required dependencies**.
 
-`pip install finkey-web`
+`pip install finkey-search`
 
 ![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
@@ -29,7 +29,7 @@ query when the first pass is thin, and a deep-research fan-out — with
 3. **Over-searching & under-searching.** Regex "when to search" lists fire on
    "hi" and miss "why did it crash today".
 
-FinKeyWeb is the retrieval layer we run inside the FinKey platform, extracted
+FinKeySearch is the retrieval layer we run inside the FinKey platform, extracted
 standalone. It decides *whether* to search, races providers so a slow one can't
 win, reads the actual pages under a hard wall-clock budget, and critiques its own
 evidence before handing it to the model.
@@ -65,12 +65,12 @@ evidence before handing it to the model.
 ## Quickstart
 
 ```bash
-pip install "finkey-web[http]"
+pip install "finkey-search[http]"
 export SERPER_API_KEY=...        # optional: add BRAVE_API_KEY / BING / TAVILY to hedge
 ```
 
 ```python
-from finkey_web import WebSearchEngine
+from finkey_search import WebSearchEngine
 
 engine = WebSearchEngine()
 ctx = engine.run(

@@ -28,8 +28,8 @@ import time
 from dataclasses import replace
 from typing import Callable, Optional
 
-from finkey_web.url_policy import URLPolicy
-from finkey_web.progress import emit_pipeline_stage, emit_web_progress
+from finkey_search.url_policy import URLPolicy
+from finkey_search.progress import emit_pipeline_stage, emit_web_progress
 
 from .backends import (
     BingWebSearchBackend,
@@ -765,7 +765,7 @@ class WebSearchEngine:
         serp_draft: bool = False,
         enrich_urls: Optional[list[str]] = None,
     ) -> tuple[list[SearchResult], Optional[str]]:
-        from finkey_web.snippet_sanitize import sanitize_search_results
+        from finkey_search.snippet_sanitize import sanitize_search_results
 
         fast = self._is_fast(decision, require_full_articles) or bool(serp_draft)
 
@@ -1796,7 +1796,7 @@ class WebSearchEngine:
         logger.info("Browser action task: query=%r message_preview=%r", query[:80], message[:80])
 
         try:
-            from finkey_web.progress import emit_browse_progress
+            from finkey_search.progress import emit_browse_progress
             emit_browse_progress(
                 phase="browser_action:start",
                 detail="Запускаю браузер…",
@@ -1848,17 +1848,17 @@ class WebSearchEngine:
             )
 
         try:
-            from finkey_web._browser.operator_agent import (
+            from finkey_search._browser.operator_agent import (
                 operator_result_to_prompt_block,
                 run_operator_sync,
             )
-            from finkey_web._browser.contour import (
+            from finkey_search._browser.contour import (
                 ContourDriver,
                 ClientSyncSession,
                 get_contour_manager,
             )
-            from finkey_web._browser.contour.schema import ContourMode
-            from finkey_web.progress import _live_browser_enabled
+            from finkey_search._browser.contour.schema import ContourMode
+            from finkey_search.progress import _live_browser_enabled
 
             _live = _live_browser_enabled()
             _user_lang = self._detect_language(message)
@@ -2046,14 +2046,14 @@ class WebSearchEngine:
             max_steps_eff = min(80, max(self._operator_max_steps, max(4, ps)))
 
         try:
-            from finkey_web._browser.operator_agent import (
+            from finkey_search._browser.operator_agent import (
                 operator_result_to_prompt_block,
                 run_operator_sync,
             )
-            from finkey_web._browser.operator_session import OperatorSessionConfig
-            from finkey_web._browser.stealth_browser import BrowserConfig
+            from finkey_search._browser.operator_session import OperatorSessionConfig
+            from finkey_search._browser.stealth_browser import BrowserConfig
 
-            from finkey_web.progress import _live_browser_enabled
+            from finkey_search.progress import _live_browser_enabled
             _live = _live_browser_enabled()
             session_cfg = OperatorSessionConfig(
                 browser=BrowserConfig(
@@ -2140,7 +2140,7 @@ class WebSearchEngine:
 
     def _stealth_fallback_sync(self, query: str) -> list[SearchResult]:
         try:
-            from finkey_web._browser.stealth_browser import BrowserConfig, fetch_sync
+            from finkey_search._browser.stealth_browser import BrowserConfig, fetch_sync
             import urllib.parse
 
             search_url = f"https://www.google.com/search?q={urllib.parse.quote(query)}&num=5"
@@ -2154,7 +2154,7 @@ class WebSearchEngine:
 
     async def _stealth_fallback_async(self, query: str) -> list[SearchResult]:
         try:
-            from finkey_web._browser.stealth_browser import StealthBrowser, BrowserConfig
+            from finkey_search._browser.stealth_browser import StealthBrowser, BrowserConfig
             import urllib.parse
 
             search_url = f"https://www.google.com/search?q={urllib.parse.quote(query)}&num=5"

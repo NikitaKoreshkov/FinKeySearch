@@ -7,15 +7,15 @@ import time
 
 import pytest
 
-from finkey_web import WebSearchEngine
-from finkey_web.backends.composite import FallbackSearchChain, GuardedBackend
-from finkey_web.classifier import SearchNeedClassifier
-from finkey_web.evidence_gate import extract_content_nouns, extract_place_tokens
-from finkey_web.page_enrichment import enrich_results_with_structured_pages
-from finkey_web.resilience import CircuitBreaker, SlidingWindowLimiter
-from finkey_web.schema import SearchResult
-from finkey_web.snippet_sanitize import sanitize_search_results
-from finkey_web.url_policy import URLPolicy
+from finkey_search import WebSearchEngine
+from finkey_search.backends.composite import FallbackSearchChain, GuardedBackend
+from finkey_search.classifier import SearchNeedClassifier
+from finkey_search.evidence_gate import extract_content_nouns, extract_place_tokens
+from finkey_search.page_enrichment import enrich_results_with_structured_pages
+from finkey_search.resilience import CircuitBreaker, SlidingWindowLimiter
+from finkey_search.schema import SearchResult
+from finkey_search.snippet_sanitize import sanitize_search_results
+from finkey_search.url_policy import URLPolicy
 
 
 class FakeBackend:

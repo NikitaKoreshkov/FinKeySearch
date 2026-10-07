@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import re
 
-from finkey_web.schema import SearchResult
+from finkey_search.schema import SearchResult
 
 _SPAM_FRAGMENTS = (
     "click here",
