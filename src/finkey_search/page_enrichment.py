@@ -22,10 +22,11 @@ import time
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from typing import Optional
 
+from finkey_search.browser_config import BrowserConfig
+
 try:
-    from finkey_search._browser.stealth_browser import BrowserConfig, fetch_structured_sync
-except ImportError:  # browser backend is an optional private component
-    BrowserConfig = None
+    from finkey_search._browser.stealth_browser import fetch_structured_sync
+except ImportError:  # a stealth engine is optional; enrichment degrades to HTTP
     fetch_structured_sync = None
 from finkey_search.url_policy import URLPolicy
 from finkey_search.progress import emit_browser_screenshot, _live_browser_enabled
@@ -58,7 +59,7 @@ def _page_enrich_nav_wait_until() -> str:
 
 
 def _page_enrich_http_timeout_s(browser_timeout_ms: int) -> float:
-    """HTTPS fallback: отдельный лимит или небольшой запас поверх браузерного."""
+    """HTTPS fallback: its own budget, or a small margin over the browser one."""
     raw = (os.getenv("FINKEY_PAGE_ENRICH_HTTP_TIMEOUT_S") or "").strip()
     if raw:
         try:
@@ -333,7 +334,7 @@ def enrich_results_with_structured_pages(
         metrics_cb: Optional[InternetMetrics] = None,
         timeout_s: float,
     ) -> tuple[int, str, bool, bool]:
-        """FAST path: Scrapling → HTTPS, никакого Playwright. Returns как _run_one."""
+        """FAST path: Scrapling → HTTPS, no Playwright. Returns like _run_one."""
         idx, _r, url = item
         if metrics_cb:
             metrics_cb.record_page_enrich_attempt()

@@ -1,0 +1,18 @@
+{
+  "webPages": {
+    "value": [
+      {
+        "name": "Example Finance Page",
+        "url": "https://example-finance.test/rates",
+        "snippet": "Central bank posted an updated policy rate reference.",
+        "datePublished": "2024-06-01T12:00:00"
+      },
+      {
+        "name": "National Bank Portal",
+        "url": "https://nationalbank.example/news",
+        "snippet": "Official monetary policy announcement for the quarter.",
+        "dateLastCrawled": "2024-05-15T08:00:00"
+      }
+    ]
+  }
+}

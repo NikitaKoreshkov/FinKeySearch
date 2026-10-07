@@ -113,13 +113,13 @@ class TavilySearchBackend:
         req = urllib.request.Request(
             url,
             data=data,
-            headers={"Content-Type": "application/json", "User-Agent": "FinKeyAI/1.0"},
+            headers={"Content-Type": "application/json", "User-Agent": "FinKeySearch/1.0"},
             method="POST",
         )
         try:
             import requests as _rq
 
-            resp = _rq.post(url, json=payload, headers={"User-Agent": "FinKeyAI/1.0"}, timeout=12)
+            resp = _rq.post(url, json=payload, headers={"User-Agent": "FinKeySearch/1.0"}, timeout=12)
             resp.raise_for_status()
             return resp.json()
         except ImportError:
@@ -129,7 +129,7 @@ class TavilySearchBackend:
             import httpx
 
             with httpx.Client(timeout=12) as client:
-                r = client.post(url, json=payload, headers={"User-Agent": "FinKeyAI/1.0"})
+                r = client.post(url, json=payload, headers={"User-Agent": "FinKeySearch/1.0"})
                 r.raise_for_status()
                 return r.json()
         except ImportError:

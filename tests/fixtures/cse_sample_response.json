@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "title": "USD/KZT — sample financial portal",
+      "link": "https://example-finance.test/usd-kzt",
+      "snippet": "The official USD to KZT rate displayed on this page is 450.25 as of 2026-05-01.",
+      "pagemap": {
+        "metatags": [
+          {
+            "article:published_time": "2026-05-01T10:00:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Duplicate domain mirror",
+      "link": "https://example-finance.test/mirror",
+      "snippet": "Should be skipped by domain dedupe.",
+      "pagemap": {}
+    },
+    {
+      "title": "Central bank bulletin",
+      "link": "https://nationalbank.example/policy/rates",
+      "snippet": "Policy rate unchanged at 14.5 percent.",
+      "pagemap": {}
+    }
+  ]
+}

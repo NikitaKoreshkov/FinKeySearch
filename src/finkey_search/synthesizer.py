@@ -29,6 +29,24 @@ from .url_quality import serp_url_quality_adjustment
 
 
 
+_CYRILLIC_RE = re.compile("[\u0400-\u04ff]")
+
+_SECTION_LABELS: dict[str, tuple[str, str]] = {
+    "currency": ("\U0001f4b1 Курсы валют:", "\U0001f4b1 Exchange rates:"),
+    "price": ("Цены/котировки:", "Prices / quotes:"),
+    "rate": ("\U0001f3e6 Процентные ставки:", "\U0001f3e6 Interest rates:"),
+    "news": ("\U0001f4f0 Актуальные события:", "\U0001f4f0 Latest:"),
+    "general": ("\U0001f50d Актуальная информация:", "\U0001f50d Current information:"),
+}
+
+
+def _section_label(kind: str, query: str, icon: str = "") -> str:
+    """Knowledge-block header, in the language the user asked in."""
+    ru, en = _SECTION_LABELS[kind]
+    label = ru if _CYRILLIC_RE.search(query or "") else en
+    return f"{icon} {label}" if icon else label
+
+
 def _synth_relevance_floor() -> float:
     raw = (os.getenv("FINKEY_SYNTH_RELEVANCE_FLOOR") or "0.06").strip()
     try:
@@ -168,7 +186,7 @@ def _format_currency(results: list[SearchResult], query: str) -> str:
     cap = _synth_max_rows()
     floor_e = _synth_enriched_display_floor()
     snip_n = _synth_snippet_preview_chars()
-    lines = ["💱 Курсы валют:"]
+    lines = [_section_label("currency", query)]
     for r in results[:cap]:
         snippet = _display_snippet(r, floor_e if r.enriched_text else snip_n)
         date_str = f" ({r.source}" + (f", {r.date}" if r.date else "") + ")"
@@ -180,7 +198,7 @@ def _format_price(results: list[SearchResult], query: str, icon: str = "📈") -
     cap = _synth_max_rows()
     floor_e = _synth_enriched_display_floor()
     snip_n = _synth_snippet_preview_chars()
-    lines = [f"{icon} Цены/котировки:"]
+    lines = [_section_label("price", query, icon)]
     for r in results[:cap]:
         snippet = _display_snippet(r, floor_e if r.enriched_text else snip_n)
         date_str = f" ({r.source}" + (f", {r.date}" if r.date else "") + ")"
@@ -192,7 +210,7 @@ def _format_rate(results: list[SearchResult], query: str) -> str:
     cap = _synth_max_rows()
     floor_e = _synth_enriched_display_floor()
     snip_n = _synth_snippet_preview_chars()
-    lines = ["🏦 Процентные ставки:"]
+    lines = [_section_label("rate", query)]
     for r in results[:cap]:
         snippet = _display_snippet(r, floor_e if r.enriched_text else snip_n)
         date_str = f" ({r.source}" + (f", {r.date}" if r.date else "") + ")"
@@ -204,7 +222,7 @@ def _format_news(results: list[SearchResult], query: str) -> str:
     cap = _synth_max_rows()
     floor_e = _synth_enriched_display_floor()
     snip_n = _synth_snippet_preview_chars()
-    lines = ["📰 Актуальные события:"]
+    lines = [_section_label("news", query)]
     for r in results[:cap]:
         title = r.title[:160]
         snippet = _display_snippet(r, floor_e if r.enriched_text else snip_n)
@@ -218,7 +236,7 @@ def _format_general(results: list[SearchResult], query: str) -> str:
     cap = _synth_max_rows()
     floor_e = _synth_enriched_display_floor()
     snip_n = _synth_snippet_preview_chars()
-    lines = ["🔍 Актуальная информация:"]
+    lines = [_section_label("general", query)]
     for r in results[:cap]:
         snippet = _display_snippet(r, floor_e if r.enriched_text else snip_n)
         date_str = f" ({r.source}" + (f", {r.date}" if r.date else "") + ")"

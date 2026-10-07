@@ -73,11 +73,11 @@ _DNS_CACHE_CAP = 2048
 
 
 def _host_resolves_to_blocked(host: str) -> bool:
-    """True, если хоть один A/AAAA-адрес хоста приватный/loopback/link-local.
+    """True if any A/AAAA record for the host is private / loopback / link-local.
 
-    Закрывает DNS-rebinding-обход проверки литеральных IP (attacker.nip.io →
-    169.254.169.254). Неразрешимый хост не блокируем — сам запрос упадёт.
-    Результат кэшируется на 5 минут.
+    Closes the DNS-rebinding bypass of literal-IP checks (nip.io style hosts →
+    169.254.169.254). An unresolvable host is not blocked — the request fails on
+    its own. Results are cached for 5 minutes.
     """
     h = host.lower().rstrip(".")
     now = time.time()
@@ -98,9 +98,9 @@ def _host_resolves_to_blocked(host: str) -> bool:
 
 
 def url_blocked_for_fetch(url: str) -> str:
-    """SSRF-проверка URL для HTTP-фетчеров: '' если ок, иначе код причины.
+    """SSRF check for HTTP fetchers: '' when allowed, otherwise a reason code.
 
-    Используется и для исходного URL, и для каждого редирект-хопа.
+    Applied to the original URL and to every redirect hop.
     """
     raw = (url or "").strip()
     if not raw:

@@ -65,7 +65,7 @@ def _freshness(date_restrict: str) -> Optional[str]:
 
 
 class BingWebSearchBackend:
-    """Адаптер Bing Web Search API v7 → ``SearchResult``."""
+    """Bing Web Search API v7 adapter → ``SearchResult``."""
 
     def __init__(self, subscription_key: str = "", endpoint: str = "") -> None:
         self._key = (subscription_key or _subscription_key_from_env()).strip()
@@ -108,7 +108,7 @@ class BingWebSearchBackend:
             params["freshness"] = freshness
 
         headers = {
-            "User-Agent": "FinKeyAI/1.0",
+            "User-Agent": "FinKeySearch/1.0",
             "Ocp-Apim-Subscription-Key": self._key,
         }
 

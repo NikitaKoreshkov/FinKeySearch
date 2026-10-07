@@ -117,7 +117,7 @@ def _fast_enrich_timeout_ms() -> int:
 
 
 def _operator_on_deep_always() -> bool:
-    """Гонять browsing-оператора на каждом DEEP-поиске даже при полезном SERP (legacy)."""
+    """Run the browsing operator on every DEEP search even with a useful SERP (legacy)."""
     raw = (os.getenv("FINKEY_BROWSING_OPERATOR_ON_DEEP", "0") or "0").strip().lower()
     return raw in ("1", "true", "yes", "on")
 from .reranker import SearchReranker
@@ -780,7 +780,7 @@ class WebSearchEngine:
             self._metrics.record_snippet_sanitize(len(results))
 
         self._metrics.record_rerank()
-        # FAST: только эвристический rerank — лишний LLM-вызов на быстрый факт не окупается.
+        # FAST: heuristic rerank only — an extra LLM call does not pay off for a quick fact.
         results = self._reranker.rerank(
             results,
             decision.search_query,
@@ -1345,9 +1345,9 @@ class WebSearchEngine:
         ctx.verified_sources_required = decision.verified_sources_required
         self._prepend_session_snippets(conversation_key, ctx)
 
-        # Оператор — только fallback, когда SERP+enrichment не дали полезного контекста.
-        # Раньше DEEP запускал его всегда (до 35+ LLM-вызовов и минуты latency);
-        # вернуть старое поведение: FINKEY_BROWSING_OPERATOR_ON_DEEP=1.
+        # The operator is a fallback, used only when SERP + enrichment gave no useful context.
+        # DEEP used to run it always (up to 35+ LLM calls and a minute of latency);
+        # to restore that behaviour set FINKEY_BROWSING_OPERATOR_ON_DEEP=1.
         if serp_draft:
             logger.info("Browsing operator skipped: serp_draft phase.")
         elif ctx.is_useful() and not (full_fetch and _operator_on_deep_always()):

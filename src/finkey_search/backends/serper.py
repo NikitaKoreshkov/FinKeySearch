@@ -182,8 +182,8 @@ class SerperSearchBackend:
             "hl": "ru" if language == "lang_ru" else "en",
             "autocorrect": True,
         }
-        # Google qdr знает только d/w/m/y-гранулярность; d7 (≈ неделя) мапим в w1,
-        # иначе фильтр свежести молча терялся на новостных/рыночных запросах.
+        # Google qdr only understands d/w/m/y granularity, so d7 (≈ a week) maps to w1;
+        # otherwise the freshness filter was silently dropped on news/market queries.
         _date_map = {"d7": "w1", "m6": "m3"}
         date_norm = _date_map.get(date_restrict, date_restrict)
         if date_norm in ("d1", "w1", "m1", "m3"):
@@ -223,8 +223,8 @@ class SerperSearchBackend:
         results: list[SearchResult] = []
         seen_domains: set[str] = set()
 
-        # Прямые ответы Google (answerBox / knowledgeGraph) — самый точный сигнал
-        # для «быстрых фактов»; идут первыми с максимальной релевантностью.
+        # Google direct answers (answerBox / knowledgeGraph) are the strongest signal
+        # for quick facts; they rank first with maximum relevance.
         results.extend(self._direct_answer_results(body))
 
         for i, item in enumerate(rows):
@@ -424,7 +424,7 @@ class SerperSearchBackend:
         headers = {
             "X-API-KEY": key,
             "Content-Type": "application/json",
-            "User-Agent": "FinKeyAI/1.0",
+            "User-Agent": "FinKeySearch/1.0",
         }
 
         try:

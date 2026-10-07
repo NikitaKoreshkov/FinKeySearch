@@ -75,7 +75,7 @@ class BraveSearchBackend:
         full_url = self._endpoint + sep + urlencode(params)
         headers = {
             "X-Subscription-Token": self._key,
-            "User-Agent": "FinKeyAI/1.0",
+            "User-Agent": "FinKeySearch/1.0",
         }
         try:
             body = self._get_json(full_url, headers)

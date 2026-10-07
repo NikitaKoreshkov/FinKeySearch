@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "latency_scale": 0.1,
+    "hedge_ms_in_bench": 200,
+    "trials_per_cell": 24,
+    "python": "3.14.3",
+    "network": false,
+    "api_keys": false
+  },
+  "hedge_vs_serial": {
+    "healthy": {
+      "serial": {
+        "p50": 40.2,
+        "p95": 43.7
+      },
+      "hedged": {
+        "p50": 40.6,
+        "p95": 45.4
+      },
+      "p95_ratio": {
+        "x": 0.96,
+        "percent": -3.7
+      }
+    },
+    "primary retry storm": {
+      "serial": {
+        "p50": 281.1,
+        "p95": 292.7
+      },
+      "hedged": {
+        "p50": 278.8,
+        "p95": 293.0
+      },
+      "p95_ratio": {
+        "x": 1.0,
+        "percent": -0.1
+      }
+    },
+    "primary empty, first backup dies": {
+      "serial": {
+        "p50": 607.2,
+        "p95": 645.0
+      },
+      "hedged": {
+        "p50": 193.2,
+        "p95": 213.1
+      },
+      "p95_ratio": {
+        "x": 3.03,
+        "percent": 202.7
+      }
+    },
+    "primary hard failure": {
+      "serial": {
+        "p50": 604.6,
+        "p95": 653.5
+      },
+      "hedged": {
+        "p50": 528.9,
+        "p95": 575.8
+      },
+      "p95_ratio": {
+        "x": 1.13,
+        "percent": 13.5
+      }
+    }
+  },
+  "availability": {
+    "measured": {
+      "p=10|k=1": 91.2,
+      "p=10|k=2": 100.0,
+      "p=10|k=3": 100.0,
+      "p=10|k=4": 100.0,
+      "p=20|k=1": 80.0,
+      "p=20|k=2": 98.8,
+      "p=20|k=3": 98.8,
+      "p=20|k=4": 100.0,
+      "p=30|k=1": 71.2,
+      "p=30|k=2": 96.2,
+      "p=30|k=3": 97.5,
+      "p=30|k=4": 98.8,
+      "p=40|k=1": 58.8,
+      "p=40|k=2": 87.5,
+      "p=40|k=3": 91.2,
+      "p=40|k=4": 97.5
+    },
+    "analytical": {
+      "p=10|k=1": 90.0,
+      "p=10|k=2": 99.0,
+      "p=10|k=3": 99.9,
+      "p=10|k=4": 100.0,
+      "p=20|k=1": 80.0,
+      "p=20|k=2": 96.0,
+      "p=20|k=3": 99.2,
+      "p=20|k=4": 99.8,
+      "p=30|k=1": 70.0,
+      "p=30|k=2": 91.0,
+      "p=30|k=3": 97.3,
+      "p=30|k=4": 99.2,
+      "p=40|k=1": 60.0,
+      "p=40|k=2": 84.0,
+      "p=40|k=3": 93.6,
+      "p=40|k=4": 97.4
+    },
+    "trials": 1280
+  },
+  "enrichment": {
+    "one page at a time": {
+      "wall_ms": 1942.5,
+      "pages_kept": 12
+    },
+    "parallel wave, no deadline": {
+      "wall_ms": 805.3,
+      "pages_kept": 12
+    },
+    "parallel wave, 0.35s deadline": {
+      "wall_ms": 371.0,
+      "pages_kept": 10
+    },
+    "one page at a time, hostile straggler": {
+      "wall_ms": 7052.8,
+      "pages_kept": 12
+    },
+    "deadline cap, hostile straggler": {
+      "wall_ms": 395.6,
+      "pages_kept": 10
+    }
+  },
+  "contracts": {
+    "breaker opens after 3 failures": "PASS",
+    "breaker half-opens after the window": "PASS",
+    "breaker closes on a success": "PASS",
+    "limiter admits exactly the quota": "PASS",
+    "limiter window slides": "PASS",
+    "hedge=0 never overlaps backends": "PASS",
+    "hedge overlaps backups with a slow primary": "PASS",
+    "hedge keeps the preferred provider's answer": "PASS"
+  }
+}

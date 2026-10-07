@@ -20,7 +20,7 @@ _REDIRECT_CODES = (301, 302, 303, 307, 308)
 
 _UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 FinKeyAI/1.0"
+    "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 FinKeySearch/1.0"
 )
 
 _DEFAULT_ACCEPT_LANGUAGE = (
@@ -42,7 +42,7 @@ def _accept_language_value() -> str:
 
 
 def html_fetch_headers() -> dict[str, str]:
-    """Общие заголовки GET для HTML (можно переопределить только язык через env)."""
+    """Shared GET headers for HTML (only the language is overridable via env)."""
     return {
         "User-Agent":               _UA,
         "Accept":                   "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
@@ -56,7 +56,7 @@ def _clip_bytes(chunk: bytes, max_bytes: int) -> bytes:
 
 
 class _SSRFGuardRedirectHandler(urllib.request.HTTPRedirectHandler):
-    """urllib-редиректы с SSRF-перепроверкой каждого хопа."""
+    """Follow urllib redirects with an SSRF re-check on every hop."""
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: N802
         reason = url_blocked_for_fetch(newurl)
@@ -82,8 +82,8 @@ def fetch_html_via_https(url: str, *, timeout_s: float = 12.0, max_bytes: int = 
 
     errs: list[str] = []
 
-    # Редиректы следуем вручную: каждый хоп перепроверяется SSRF-политикой,
-    # иначе «хороший» URL может средиректить на 169.254.169.254/внутреннюю сеть.
+    # Redirects are followed manually so each hop passes the SSRF policy;
+    # otherwise a "good" URL can redirect to 169.254.169.254 or an internal net.
     try:
         import requests as rq
 
@@ -168,12 +168,12 @@ def fetch_html_via_https(url: str, *, timeout_s: float = 12.0, max_bytes: int = 
 
 
 _GAP_MARK = (
-    "\n … ─── [пропущен фрагмент страницы: сохранены начало и конец текста] ─── … \n"
+    "\n … ─── [page middle omitted: head and tail of the document kept] ─── … \n"
 )
 
 
 def excerpt_head_tail(blob: str, lim: int) -> str:
-    """Не отрезать только «шапку»: при лимите даём начало + конец документа."""
+    """Never truncate to just the header: under a limit keep the head + the tail."""
     if lim <= 0 or len(blob) <= lim:
         return blob
     mark = _GAP_MARK
@@ -223,7 +223,7 @@ def _trafilatura_extract(html: str) -> str | None:
 
 
 def html_to_readable_text(html: str, *, max_chars: int) -> str:
-    """Strip scripts/styles/tags — затем при лимите сохраняем начало и конец страницы.
+    """Strip scripts/styles/tags — then, under a limit, keep head and tail.
 
     Extraction preference (``FINKEY_PAGE_EXTRACTOR``):
       • ``trafilatura`` (default) — main-article extraction whenever the
@@ -257,7 +257,7 @@ def html_to_readable_text(html: str, *, max_chars: int) -> str:
 
 
 def _default_http_page_chars() -> int:
-    """Сколько символов сохранять после strip (см. excerpt_head_tail при переполнении)."""
+    """How many characters to keep after stripping (see excerpt_head_tail on overflow)."""
     try:
         v = int(os.getenv("FINKEY_WEB_PAGE_ENRICH_MAX_CHARS", "500000"))
     except ValueError:
@@ -271,7 +271,7 @@ def fetch_page_text_http(
     timeout_s: float = 12.0,
     max_chars: int | None = None,
 ) -> tuple[str, str]:
-    """HTTPS GET → текст: по умолчанию большой лимит; при переполнении — начало+конец страницы."""
+    """HTTPS GET → text: large budget by default; on overflow keep head + tail."""
     html, err = fetch_html_via_https(url, timeout_s=timeout_s)
     if err:
         logger.info("HTTP fetch failed url=%s err=%s", url[:120], err)

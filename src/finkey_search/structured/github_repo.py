@@ -144,7 +144,7 @@ def fetch_github_repo_facts(
     url = f"https://api.github.com/repos/{owner}/{repo}"
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "FinKeyAI-websearch/1.0",
+        "User-Agent": "FinKeySearch/1.0",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     tok = _token()

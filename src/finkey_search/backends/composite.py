@@ -19,9 +19,8 @@ logger = logging.getLogger(__name__)
 
 def _hedge_delay_s() -> float:
     """
-    Через сколько секунд запускать запасные бэкенды параллельно, если
-    приоритетный ещё не ответил. 0 — выключить хеджирование (строгая
-    последовательная цепочка, как раньше).
+    Grace period before backup backends launch in parallel, in seconds.
+    0 disables hedging (strictly sequential chain).
     """
     raw = (os.getenv("FINKEY_SEARCH_HEDGE_MS", "2000") or "").strip()
     try:
@@ -47,11 +46,12 @@ class FallbackSearchChain:
     Try backends in order until one returns non-empty results.
     Empty list from a backend does **not** count as hard failure — next backend runs.
 
-    Hedged mode (default, ``FINKEY_SEARCH_HEDGE_MS``>0): приоритетный бэкенд
-    стартует сразу; если он не ответил за грейс-период (429-ретраи, сеть),
-    остальные запускаются параллельно, и берётся лучший по приоритету среди
-    непустых. Последовательная деградация «Serper висит 6с → потом Brave ещё
-    3с» превращается в гонку с общим временем ~max, а не sum.
+    Hedged mode (default, ``FINKEY_SEARCH_HEDGE_MS``>0): the preferred backend
+    starts immediately; if it has not answered within the grace period (429
+    retries, slow network) the remaining backends launch in parallel and the
+    highest-priority non-empty result wins. Sequential degradation — "backend A
+    hangs for 6s, then B takes another 3s" — becomes a race that costs ~max
+    instead of sum.
     """
 
     def __init__(self, layers: list[GuardedBackend]) -> None:
@@ -171,7 +171,7 @@ class FallbackSearchChain:
                 )
 
                 if not done and not hedged:
-                    # Приоритетный не успел за грейс — запускаем запасные параллельно.
+                    # Preferred backend missed the grace window: launch backups in parallel.
                     hedged = True
                     for i in range(1, len(layers)):
                         futures[_submit(i)] = i
@@ -190,11 +190,11 @@ class FallbackSearchChain:
                     if rows:
                         results_by_priority[prio] = rows
 
-                # Топ-приоритет ответил непустым — берём сразу.
+                # Top priority answered with rows — take it right away.
                 if 0 in results_by_priority:
                     break
-                # Приоритетный завершился пусто: если есть любой готовый непустой — берём
-                # лучший из готовых; иначе ждём остальных (или хеджируем немедленно).
+                # Preferred finished empty: if any non-empty result is already in
+                # hand take the best of them, otherwise wait for the rest (or hedge now).
                 if all(p != 0 for p in futures.values()) and results_by_priority:
                     break
                 if not futures and not hedged and len(layers) > 1:
@@ -202,7 +202,7 @@ class FallbackSearchChain:
                     for i in range(1, len(layers)):
                         futures[_submit(i)] = i
         finally:
-            # Не ждём отставшие бэкенды: победитель уже есть, потоки доработают в фоне.
+            # Don't wait for stragglers: the winner exists, threads finish in the background.
             pool.shutdown(wait=False, cancel_futures=True)
 
         if not results_by_priority:

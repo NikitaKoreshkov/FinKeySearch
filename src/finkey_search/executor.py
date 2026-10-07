@@ -171,7 +171,7 @@ class WebSearchExecutor:
         import urllib.parse
 
         full_url = url + "?" + urllib.parse.urlencode(params)
-        headers  = {"User-Agent": "FinKeyAI/1.0"}
+        headers  = {"User-Agent": "FinKeySearch/1.0"}
         retries, backoff_base = self._cse_retry_params()
         retry_status = frozenset({429, 500, 502, 503, 504})
 
