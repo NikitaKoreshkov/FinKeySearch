@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finkey-web"
+version = "0.1.0"
+description = "Production web-search layer for AI agents: hedged multi-provider fallback (Serper/Brave/Bing/Tavily), LLM-first search classifier, deadline-bounded parallel page enrichment, evidence gate, deep-research fan-out. Zero required dependencies."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "AGPL-3.0-only"
+authors = [{ name = "FinKey" }]
+keywords = ["web-search", "llm", "agents", "serper", "brave", "bing", "tavily", "rag", "deep-research", "retrieval"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+http = ["requests>=2.28"]
+scrapling = ["scrapling>=0.2"]
+redis = ["redis>=5"]
+otel = ["opentelemetry-api>=1.20"]
+test = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/NikitaKoreshkov/FinKeyWeb"
+Repository = "https://github.com/NikitaKoreshkov/FinKeyWeb"
+Issues = "https://github.com/NikitaKoreshkov/FinKeyWeb/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
